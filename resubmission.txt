@@ -1,0 +1,61 @@
+P2 RESUBMISSION - Multi-Threaded Train Scheduler
+
+Student: Vanya Singla
+NetLink ID: V01047173
+Original Grade: 9/15
+Date: November 26, 2025
+
+ISSUES IDENTIFIED:
+
+1. Timing Delay Bug (Line 164 in dispatcher_thread)
+   Problem: 
+   - Added usleep(100000) at end of dispatcher loop
+   - Caused 0.1 second delay after each train dispatch
+   - Cumulative effect: trains dispatched 0.1-0.3 seconds late
+   
+   Impact:
+   - Test 1: Partial credit (1/2 marks)
+   - Test 2: Partial credit (1/2 marks)
+   - Test 3: Failed (0/2 marks)
+   - Test 4: Failed (0/2 marks)
+
+2. Priority Sorting Bug (enqueue function)
+   Problem:
+   - Trains added to queue in arrival order only (FCFS)
+   - HIGH priority trains not prioritized over low priority
+   - Wrong dispatch order when multiple trains ready
+   
+   Impact:
+   - Test 3: Wrong train order (low priority before HIGH)
+   - Test 4: Wrong train order
+
+CHANGES MADE:
+
+1. Fixed Timing Delay:
+   - Removed usleep(100000) from line 164
+   - Dispatcher now immediately processes next train
+   - No artificial delays in scheduling
+
+2. Fixed Priority Sorting:
+   - Rewrote enqueue() to insert trains by priority
+   - HIGH priority trains insert before low priority
+   - Same priority uses FCFS (arrival time)
+   - Added function prototype for compare_trains()
+
+VERIFICATION:
+
+Test 3 Results:
+Before: Train 1 (low) at 0.5s, Train 2 (HIGH) at 0.7s 
+After:  Train 2 (HIGH) at 0.4s, Train 1 (low) at 0.5s 
+
+All timing now matches expected output exactly.
+
+RATIONALE FOR RESUBMISSION:
+
+These were significant implementation flaws affecting core functionality:
+- Timing precision is critical for train scheduling simulation
+- Priority-based scheduling is a key requirement
+
+Both issues are now resolved and all test cases pass.
+
+Thank you for considering this resubmission.
